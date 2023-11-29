@@ -1,0 +1,164 @@
+.App {
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.container {
+  outline: 1px solid white;
+  /* height: 100vh; */
+  /* gap: 20px */
+}
+
+.header {
+  color: white;
+  font-size: 44px;
+  margin: 50px 0 10px 0;
+  font-weight: bold;
+}
+
+body {
+  background: #252525;
+}
+
+.cells {
+  display: flex;
+  outline: 1px solid white;
+  /* background-color: #616161; */
+  padding: 15px;
+  gap: 15px;
+}
+
+.cell {
+  color: white;
+  border: 1px solid white;
+  background-image: linear-gradient(to bottom, #252525 70%, #555555 30%);
+  border-radius: 10px;
+  width: auto;
+  padding: 0 10px 0 10px;
+}
+
+.cell h4 {
+  padding-top: 7.5px;
+  color: #999999;
+  font-style: italic;
+}
+
+.bot {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  color: white;
+  gap: 50px;
+  padding: 10px 0;
+}
+
+.bot h3{
+  margin: 0;
+}
+.conditions label {
+  /* width: 55px;
+  height: 55px; */
+  margin: 0 5px;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.date p {
+  font-size: medium; 
+}
+
+.info {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 15px;
+  background-color: #555555;
+}
+
+.info:hover{
+  background-color: #777777;
+  cursor: cell;
+}
+
+.infoScreen {
+  position: absolute;
+  border: 3px double white;
+  background-color: #555555;
+  color: white;
+  margin-top: 110px;
+  width: 800px;
+  height: 550px; 
+  transition: opacity 0.15s ease-in;
+}
+.infoScreen p{
+  margin-top: 0;
+}
+
+#graph{
+  position: absolute;
+  left: 20px;
+}
+
+.disc{
+  position: absolute;
+  left: 65%
+}
+
+.example{
+  position: absolute;
+  left: 20px;
+  bottom: 10px;
+  width: auto;
+}
+
+.example p{
+  text-align: left;
+  margin: 2px;
+}
+
+.conditionIndex {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+
+.test {
+  width: 450px;
+  height:100px;
+  outline: 2px solid red;
+}
+/* HIDE RADIO */
+input[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  /* width: 55px;
+  height: 55px; */
+  cursor: pointer;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+input[type=radio]:checked +img{
+  /* outline: 2px solid #f00; */
+  background-color: #555555;
+  outline: 1px solid whitesmoke;
+}
+
+input[type=radio]:hover + img{
+  background-color: #777777;
+}
+
+input[type=radio]:active + img{
+  background-color: #333333;
+  outline: 1px solid whitesmoke;
+}
