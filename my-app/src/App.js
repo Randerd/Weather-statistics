@@ -57,7 +57,7 @@ function App() {
   ])
   const [location, setLocation] = useState({label: "Toronto", value: 'Toronto'})  
   // const [sinceDate, setSinceDate] = useState(new Date(2023,11,8,0));
-  const sinceDate = new Date(2023,11,8,0)
+  const sinceDate = new Date(2023,11,5,12)
 
   const customStyles = {
     option: (defaultStyles, state) => ({
