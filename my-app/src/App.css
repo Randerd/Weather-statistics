@@ -35,7 +35,7 @@ body {
 .cell {
   color: white;
   border: 1px solid white;
-  background-image: linear-gradient(to bottom, #252525 70%, #555555 30%);
+  background-image: linear-gradient(to bottom, #252525 72.5%, #555555 27.5%);
   border-radius: 10px;
   width: auto;
   padding: 0 10px 0 10px;
@@ -45,6 +45,17 @@ body {
   padding-top: 7.5px;
   color: #999999;
   font-style: italic;
+  height: 69px;
+}
+
+.cell img{
+  /* max-width: 200px; */
+  cursor: pointer;
+  margin-top: 10px;
+  max-height: 90px;
+  width: auto;
+  height: auto;
+  
 }
 
 .bot {
@@ -58,13 +69,6 @@ body {
 
 .bot h3{
   margin: 0;
-}
-.conditions label {
-  /* width: 55px;
-  height: 55px; */
-  margin: 0 5px;
-  justify-content: center; 
-  align-items: center; 
 }
 
 .date p {
@@ -83,82 +87,15 @@ body {
 
 .info:hover{
   background-color: #777777;
-  cursor: cell;
-}
-
-.infoScreen {
-  position: absolute;
-  border: 3px double white;
-  background-color: #555555;
-  color: white;
-  margin-top: 110px;
-  width: 800px;
-  height: 550px; 
-  transition: opacity 0.15s ease-in;
-}
-.infoScreen p{
-  margin-top: 0;
-}
-
-#graph{
-  position: absolute;
-  left: 20px;
-}
-
-.disc{
-  position: absolute;
-  left: 65%
-}
-
-.example{
-  position: absolute;
-  left: 20px;
-  bottom: 10px;
-  width: auto;
-}
-
-.example p{
-  text-align: left;
-  margin: 2px;
-}
-
-.conditionIndex {
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-}
-
-.test {
-  width: 450px;
-  height:100px;
-  outline: 2px solid red;
-}
-/* HIDE RADIO */
-input[type=radio] { 
-  position: absolute;
-  opacity: 0;
-  /* width: 55px;
-  height: 55px; */
   cursor: pointer;
 }
 
-/* IMAGE STYLES */
-[type=radio] + img {
-  cursor: pointer;
+.text {
+  font-weight: bold;
+  /* font-style: italic; */
 }
 
-/* CHECKED STYLES */
-input[type=radio]:checked +img{
-  /* outline: 2px solid #f00; */
-  background-color: #555555;
-  outline: 1px solid whitesmoke;
-}
-
-input[type=radio]:hover + img{
-  background-color: #777777;
-}
-
-input[type=radio]:active + img{
-  background-color: #333333;
-  outline: 1px solid whitesmoke;
+.select {
+  margin-top: 5px;
+  width: 150px
 }

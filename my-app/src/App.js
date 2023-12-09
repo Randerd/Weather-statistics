@@ -1,15 +1,9 @@
-// import sunny from './img/sunny.png';
-// import cloudy from './img/cloudy.png';
-// import snowy from './img/snowy.png';
-// import rainy from './img/rainy.png';
-// import all from './img/all.png';
-import graph from './img/graph.png'
-import eqBlue from './img/eqBlue.png'
-import eqRed from './img/eqRed.png'
-import eqGreen from './img/eqGreen.png'
-import conditionIndex from './img/conditionIndex.png'
+import AccuWeather from './img/AccuWeather.png'
+import OpenWeather from './img/OpenWeather.png'
+import weatherAPI from './img/weatherAPI.png'
 import React, {useEffect, useState} from 'react';
 import './App.css';
+import Select from 'react-select'
 
 function getColor(value) {
   if (value === '-'){
@@ -18,14 +12,21 @@ function getColor(value) {
   return ["hsl(", value, ",100%,50%)"].join("");
 }
 
+const links = {'Accu Weather': 'https://www.accuweather.com/',
+              'Open Weather': 'https://openweathermap.org/',
+              'Weather API': 'https://www.weatherapi.com/weather/'}
+
 function Provider(props){
-  // console.log(props)
-  const {name, stats} = props;
+  const {logo,name, stats} = props;
   return <div className='cell'>
-      <h2>{name} 'logo'</h2>
+      <img src={logo} alt={name+'logo'} onClick={()=>window.open(links[name])}/>
+      {/* <h2>{name} 'logo'</h2> */}
       <div>
-        {stats.map((stat, idx) => (
-          <p style={{color: getColor(stat), fontWeight: 'bold'}} key={idx}>{stat}%</p>
+        {stats.map(([stat,count], idx) => (
+          <div style={{margin: '16px 0 16px 0'}} key={idx}>
+            <span style={{color: getColor(stat), fontWeight: 'bold'}}>{stat}%</span>
+            <span style={{marginLeft: '5px', fontSize: '11px', color: '#CCCCCC'}}>{count}</span>
+          </div>
         ))}
       </div>
     </div>
@@ -34,27 +35,15 @@ function Provider(props){
 
 function App() {
   const [providers, setProviders] = useState([
-      {name: "Accu Weather", stats:[87.58,88.34,75.45,64.14,83.65,55.78,46.80,56.89,49.33,21.21]}, 
-      {name: "Open Weather", stats:[95.23,93.84,72.51,84.67,65.83,78.21,68.97,32.11,54.55,65.41]}, 
-      {name: "Weather API", stats:[93.45,84.85,91.42,85.39,76.76,54.33,42.87,61.59,39.81,31.02]}, 
+      {logo: AccuWeather, name: "Accu Weather", stats:[[87.82, 52], [88.2, 52], [89.2, 52], [88.29,52], [88.68,52], [88.34,52], [87.16,52], [87.2,52], [87.69,52], [86.63,52], [86.51,52], [85.66,52]]}, 
+      {logo: OpenWeather, name: "Open Weather", stats:[[87.82, 52], [88.2, 52], [89.2, 52], [88.29,52], [88.68,52], [88.34,52], [87.16,52], [87.2,52], [87.69,52], [86.63,52], [86.51,52], [85.66,52]]}, 
+      {logo: weatherAPI, name: "Weather API", stats:[[87.82, 52], [88.2, 52], [89.2, 52], [88.29,52], [88.68,52], [88.34,52], [87.16,52], [87.2,52], [87.69,52], [86.63,52], [86.51,52], [85.66,52]]}, 
   ])
-  // const providers = ['Accu Weather', 'Open Weather', 'Weather API']
   const locations = [
     {label: "Toronto", value: 'Toronto'},
     {label: "Innisfil", value: 'Innisfil'},
     {label: "Kingston", value: 'Kingston'}]
-  // let Acc_data = []
-  // const [Acc_data, setAcc_data] = useState([])
-  // let Acc_data = [
-  //   [83.65, 84.44, 86.37, 84.53, 84.8, 85.25, 84.61, 84.82, 85.85, 85.16, 85.23, 84.15],
-  //   [91.57, 92.11, 91.67, 92.49, 92.42, 90.5, 90.21, 89.36, 89.44, 89.27, 89.02, 89.82],
-  //   [53.65, 51.82, 53.08, 53.3, 53.56, 54.9, 55.09, 54.81, 55.38, 56.27, 56.76, 55.76],
-  //   [93.36, 96.99, 94.95, 95.19, 95.62, 95.62, 95.61, 95.56, 95.58, 95.56, 95.54, 94.98],
-  //   [96.84, 93.33, 92.05, 94.4, 96.43, 95.96, 94.97, 95.03, 94.94, 94.9, 94.52, 93.36],
-  //   [99.19, 99.05, 98.58, 98.6, 99.59, 99.55, 98.87, 98.45, 98.39, 98.31, 98.26, 98.25],
-  //   [76.55, 75.8, 75.24, 75.62, 75.69, 75.65, 75.67, 75.67, 75.73, 75.83, 78.53, 78.74],
-  //   ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-  //   ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
+
   const [Acc_data, setAcc_data] = useState([
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
@@ -64,17 +53,34 @@ function App() {
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']])
-  const [location, setLocation] = useState('Toronto')  
-  const [sinceDate, setSinceDate] = useState(new Date());
-  const [condition, setCondition] = useState('all')
-  const [infoHovering, setInfoHovering] = useState(false)
-  
+    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+  ])
+  const [location, setLocation] = useState({label: "Toronto", value: 'Toronto'})  
+  // const [sinceDate, setSinceDate] = useState(new Date(2023,11,8,0));
+  const sinceDate = new Date(2023,11,8,0)
+
+  const customStyles = {
+    option: (defaultStyles, state) => ({
+      ...defaultStyles,
+      color: state.isSelected ? "#555555" : "#ffffff",
+      backgroundColor: state.isSelected ? "#FFFFFF" : "#555555",
+      // height: '35px',
+    }),
+
+    control: (defaultStyles) => ({
+      ...defaultStyles,
+      backgroundColor: "#555555",
+      padding: "2px",
+      border: "none",
+      boxShadow: "none",
+    }),
+    singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#fff" }),
+  };
+
   useEffect(() => {
-      fetch(' https://0yl27fj30f.execute-api.ca-central-1.amazonaws.com/default/Get-Accuracy')
+    fetch('https://5g6zpwtxll.execute-api.ca-central-1.amazonaws.com/default/Get-Accuracy')
         .then((response) => response.json())
         .then((data) => {setAcc_data(data)})
-      
     }, [])
 
     useEffect(() => {
@@ -83,49 +89,36 @@ function App() {
 
 
   const changeData = () => {
-    switch(location){
+    switch(location.label){
       case 'Toronto':
-        console.log('change Toronto')
         setProviders([
-          {name: "Weather API", stats: Acc_data[0]},
-          {name: "Open Weather", stats: Acc_data[3]}, 
-          {name: "Accu Weather", stats: Acc_data[6]}, 
+          {logo: weatherAPI, name: "Weather API", stats: Acc_data[0]},
+          {logo: OpenWeather, name: "Open Weather", stats: Acc_data[3]}, 
+          {logo: AccuWeather, name: "Accu Weather", stats: Acc_data[6]}, 
         ])
         break
       case 'Kingston':
-          console.log('change Kingston')
           setProviders([
-            {name: "Weather API", stats: Acc_data[1]},
-            {name: "Open Weather", stats: Acc_data[4]}, 
-            {name: "Accu Weather", stats: Acc_data[7]}, 
+            {logo: weatherAPI,name: "Weather API", stats: Acc_data[1]},
+            {logo: OpenWeather,name: "Open Weather", stats: Acc_data[4]}, 
+            {logo: AccuWeather,name: "Accu Weather", stats: Acc_data[7]}, 
         ])
         break
       case 'Innisfil':
-        console.log('change Innisfil')
         setProviders([
-          {name: "Weather API", stats: Acc_data[2]},
-          {name: "Open Weather", stats: Acc_data[5]}, 
-          {name: "Accu Weather", stats: Acc_data[8]}, 
+          {logo: weatherAPI,name: "Weather API", stats: Acc_data[2]},
+          {logo: OpenWeather,name: "Open Weather", stats: Acc_data[5]}, 
+          {logo: AccuWeather,name: "Accu Weather", stats: Acc_data[8]}, 
+        ])
+        break
+      default:
+        setProviders([
+          {logo: weatherAPI,name: "Weather API", stats: Acc_data[0]},
+          {logo: OpenWeather,name: "Open Weather", stats: Acc_data[3]}, 
+          {logo: AccuWeather,name: "Accu Weather", stats: Acc_data[6]}, 
         ])
         break
     }
-  }
-  const getOpacity = () =>{
-    return infoHovering === true ? 1 : 0
-  }
-  const getVisibility = () =>{
-    return infoHovering === true ? 'visible' : 'hidden'
-  }
-
-  const OnConditionChange = (event) => {
-    const value = event.target.value
-    setCondition(value)
-    console.log(value)
-  }
-
-  const onLocationChange = (event) => {
-    const value = event.target.value
-    setLocation(value)
   }
 
   function formatAMPM(date) {
@@ -145,84 +138,37 @@ function App() {
       <div className="container">
         <section className='cells'>
           <div className='cell'>
-            <h4>Anylitics</h4>
+            <h4>Analytics</h4>
             {statisitcs.map((stat, idx) => (
-              <p key={idx}>{stat}</p>
+              <p className='text' key={idx}>{stat}</p>
             ))}
 
           </div>
           {providers.map((provider, idx) => (
-            <Provider key={idx} name={provider.name} stats={provider.stats}/>
-            // <div key={idx} className='cell'>{provider}</div>
+            <Provider key={idx} logo={provider.logo} name={provider.name} stats={provider.stats}/>
           ))}
         </section>
         <section className='bot'>
-          {/* <div className='conditions'>
-            <h3> Conditions:</h3>
-            <label className='radios' >
-              <input type="radio" id="all" value="all" name="condition" checked={condition === 'all'} onChange={OnConditionChange.bind(this)}/>
-              <img alt='all' src={all}/>
-            </label>
-            <label className='radios'>
-              <input type="radio" id="sunny" value="sunny" name="condition" checked={condition === 'sunny'} onChange={OnConditionChange.bind(this)}/>
-              <img alt='sunny' src={sunny}/>
-            </label>
-            <label className='radios'>
-              <input type="radio" id="cloudy" value="cloudy" name="condition" checked={condition === 'cloudy'} onChange={OnConditionChange.bind(this)}/>
-              <img alt='cloudy' src={cloudy}/>
-            </label>
-            <label className='radios'>
-              <input type="radio" id="rainy" value="rainy" name="condition" checked={condition === 'rainy'} onChange={OnConditionChange.bind(this)}/>
-              <img  alt='rainy' src={rainy}/>
-              </label>
-            <label className='radios'>
-              <input type="radio" id="snowy" value="snowy" name="condition" checked={condition === 'snowy'} onChange={OnConditionChange.bind(this)}/>
-              <img  alt='snowy' src={snowy}/>
-            </label>
-          </div> */}
           <div className='date'>
-            <h3> Time period</h3>
-            <p>Since: {formatAMPM(sinceDate)} - {sinceDate.toLocaleDateString()}</p>
+            <h3> Time period:</h3>
+            <p>Since: {sinceDate.toISOString().substring(0,10)} {formatAMPM(sinceDate)}</p>
           </div>
-          <div className='location'>
-            <h3> Location </h3>
-            <select value={location} onChange={onLocationChange}>
-              {locations.map((loc, idx) => (
-                <option key={idx} value={loc.value}>{loc.label}</option>
-              ))}
-            </select>
-
+          <div>
+            <h3> Location: </h3>
+            <Select
+              className='select'
+              defaultValue={location}
+              onChange={setLocation}
+              options={locations}
+              styles={customStyles}
+            />
           </div>
           <div className='info'
-            onMouseOver={()=>{setInfoHovering(true)}}
-            onMouseOut={()=>{setInfoHovering(false)}}
-          >i</div>
+            onClick={() => window.open("https://github.com/Randerd/Weather-statistics/tree/main")}>
+              i
+          </div>
 
         </section>
-      </div>
-      <div className='infoScreen' style={{visibility: getVisibility(), opacity: getOpacity()}}>
-        <h2>How statisitcs are calculated</h2>
-        <img id='graph' alt='graph' src={graph} style={{width: '60%'}}/> 
-        <div className='disc'>
-          <img alt='f(x)' src={eqBlue} style={{width:'80%', background:'#999999'}}/>
-          <p>Final value for the given prediction</p>
-          <img alt='c(a)' src={eqRed} style={{width:'70%', background:'#999999'}}/>
-          <p>Where a is the Difference in condition between the current and expected condition</p> 
-          <img alt='t(b)' src={eqGreen} style={{width:'70%', background:'#999999'}}/>
-          <p>Where b is the Difference in temperature between current and expected temperature</p>
-        </div>
-        <div className='example'> 
-          <h4>Example:</h4>  
-          <p>Current conditions: Sunny, 15C</p>
-          <p>Expected conditions: partly cloudy, 18C</p>
-          <p>Condition index off: 1, Temp diff: 3 </p>
-          <p>Prediction value: 64.23%</p>
-        </div>
-        <div className='conditionIndex'> 
-            <h4 style={{marginBottom:'0'}}> Condition Index </h4>
-            <img alt='condition index' src={conditionIndex} />
-            {/* <div className='test'></div> */}
-        </div>
       </div>
     </div>
   );
