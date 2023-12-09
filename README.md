@@ -36,10 +36,10 @@ Condition: Converted to condition index value
 
 <font size=4> How the accuracy score is calculated:  </font>  
 t = |difference| in temperature between the current and forecasted values  
-Temperature difference score =>  $\color{dd4444} T(t) = 2^{t\over 7} - 1$   
+Temperature difference score =>  ${\color{#dd4444} T(t) = 2^{t\over 7} - 1}$   
 c = |difference| in condition index between the current and forecasted values   
-Condition index difference score => $ \color{44DD44}C(c) = 2^{c\over 3} - 1$  
-Accuracy score => $\color{44dddd} A(c,t) = e^{-[T(t) + C(c)]^2}$ $ \times 100$ 
+Condition index difference score => $\color{#44DD44}C(c) = 2^{c\over 3} - 1$  
+Accuracy score => $\color{#44dddd} A(c,t) = e^{-[T(t) + C(c)]^2}$ $ \times 100$ 
 
 <font size=3> Visualization:  </font>  
 <img src="imgs/geogebra.png" alt="visualization" style="width:auto; max-width: 650px"/>
@@ -47,14 +47,14 @@ Accuracy score => $\color{44dddd} A(c,t) = e^{-[T(t) + C(c)]^2}$ $ \times 100$
 <font size=3>Example:</font>  
 Current forecast being accessed: 4-hour forecast   
 Current weather: 2023-06-23T20, 21.3° Cloudy  
-Forecast Weather: 2023-03-23T14, 20.8° Partially Cloudy
+Forecast Weather: 2023-03-23T14, 20.8° Partially Cloudy  
 
 $t = | 21.3 - 20.8 | = 0.5  $  
 $T(t) = 2^{0.5\over 7} - 1 = 0.050756...$   
 $c = | 3 - 2 | = 1  $  
 $C(c) = 2^{1\over 3} - 1 = 0.259921...$   
 $A(c,t) = e^{-[T(t) + C(c)]^2} \times 100 = e^{-[0.0507... + 0.2599...]^2} \times 100 = 90.80%$  
-∴ The associated 4-hour accuracy score given for the date 2023-03-23T14 is  $ \color{44DD44}90.80$%
+∴ The associated 4-hour accuracy score given for the date 2023-03-23T14 is  $\color{#44DD44}90.80$%
 
 Note: Bell function and exponentials were chosen so the further from the true value, the more it _scales_ down
 ### Get-Accuracy
