@@ -11,9 +11,9 @@ https://github.com/gitname/react-gh-pages
 ### Visual description  
 _Analytics:_ This section describes what forecasted hour is being scored.  
 The other columns each represents the weather providers accuracy for each forecast.  
-<span style='margin-left:30px'> <span style="color: #87F787">XX.XX%</span> <font color='AAAAAA' size=1> xxx </font> </span>  
-<font color='#87F787'>Accuracy score:</font> Avg forecast score*  
-<font color='AAAAAA'>Sample count </font>
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; $\color{#87F787} XX.XX$% <font size=1> $\color{#AAAAAA} xxx$ </font>   
+$\color{#87F787} Accuracy\ score$: Avg forecast score*  
+$\color{#AAAAAA} Sample\ count$
 
 *Custom scoring formula
 
