@@ -39,7 +39,7 @@ t = |difference| in temperature between the current and forecasted values
 Temperature difference score =>  ${\color{#dd4444} T(t) = 2^{t\over 7} - 1}$   
 c = |difference| in condition index between the current and forecasted values   
 Condition index difference score => $\color{#44DD44}C(c) = 2^{c\over 3} - 1$  
-Accuracy score => $\color{#44dddd} A(c,t) = e^{-[T(t) + C(c)]^2}$ $ \times 100$ 
+Accuracy score => $\color{#44dddd} A(c,t) = e^{-[T(t) + C(c)]^2}$ $\times 100$ 
 
 <font size=3> Visualization:  </font>  
 <img src="imgs/geogebra.png" alt="visualization" style="width:auto; max-width: 650px"/>
