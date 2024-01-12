@@ -1,14 +1,13 @@
 import os
 import requests
-import logging
-import json
-from dynamodb_json import json_util as jsonDB
-import boto3
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from dynamodb_json import json_util as jsonDB
+import boto3
+import json
+import logging
     
-#Needed because Lambda runs on a different timezone
-time_zone = ZoneInfo("Canada/Eastern")      
+time_zone = ZoneInfo("Canada/Eastern")
 dynamodb = boto3.client('dynamodb')
 
 logger = logging.getLogger()
@@ -60,10 +59,13 @@ def get_condition_index(condition_index, cond):
 
 def get_accu_weather(location):
     #Accu Weather specific location codes
-    accu_weather_api_key = os.environ['ACCU_WEATHER_API_KEY']
+    #Need multiple API keys to evaluate all locations
+    api_keys = {'toronto': os.environ['ACCU_WEATHER_API_KEY1'], 
+                'innisfil': os.environ['ACCU_WEATHER_API_KEY2'], 
+                'kingston':os.environ['ACCU_WEATHER_API_KEY3']}
+    accu_weather_api_key = api_keys[location]
    
-    locations = {"toronto": "55488", "thornhill": "1365404","innisfil": "55080", 'kingston':'214971'}
-
+    locations = {'toronto': '55488', 'thornhill': '1365404','innisfil': '55080', 'kingston':'49556'}
     #Calling APIs
     twelve_hour_forcast_url = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{location}?apikey={api_key}&metric=true&details=true"
     twelve_hour_forcast = get_forcast(twelve_hour_forcast_url.format(location = locations[location], api_key=accu_weather_api_key))
@@ -73,12 +75,14 @@ def get_accu_weather(location):
     res = []
 
     #If either forcast doesn't work, skip storing
-    if twelve_hour_forcast == None or current_forcast == None:      
+    if twelve_hour_forcast == None or current_forcast == None:
+        logger.info(title +' | Error')
         return title +' | Error'
     else:
         current_forcast = current_forcast[0]
 
     #Collect current weather data
+        
     cur_time = hour_rounder(datetime.fromtimestamp(current_forcast['EpochTime'], tz=time_zone))
     temp = current_forcast['Temperature']['Metric']['Value']
     condition = get_condition_index(accu_weather_conditions, current_forcast['WeatherIcon'])
@@ -98,8 +102,7 @@ def get_accu_weather(location):
         condition = get_condition_index(accu_weather_conditions,hour['WeatherIcon'])
         cloud_cov = hour["CloudCover"]
         res.append({'Temp': temp, 'Condition': condition, 'Cloud Cov': cloud_cov})
-
-    #Store whole item at once 
+        
     logger.info(f"Storing {cur_time.strftime('%Y-%m-%dT%H')} to {title} table")
     save_to_db(title, res)
 
@@ -119,10 +122,11 @@ def get_open_weather(location):
 
     #If either forcast doesn't work, skip storing
     if four_day_hourly_forcast == None or current_forcast == None:
+        logger.info(title +' | Error')
         return title + " | Error"
     else:
         four_day_hourly_forcast = four_day_hourly_forcast['list']
-        
+
     #Collect current weather data
     cur_time = hour_rounder(datetime.fromtimestamp(current_forcast['dt'], tz=time_zone))
     temp = current_forcast['main']['temp']
@@ -143,26 +147,27 @@ def get_open_weather(location):
         condition = get_condition_index(open_weather_conditions,hour['weather'][0]['id'])
         cloud_cov = hour['clouds']['all']
         res.append({'Temp': temp, 'Condition': condition, 'Cloud Cov': cloud_cov})
-
-    #Store whole item at once 
+ 
     logger.info(f"Storing {cur_time.strftime('%Y-%m-%dT%H')} to {title} table")
     save_to_db(title, res)
     
 def get_weather_api(location):
-    title = f'Weather_API_{location}'   #Before new naming convention
-
+    #Before new naming convention
+    title = f'Weather_API_{location}' 
+    res = []
+    
     #WeatherAPI specific location naming convention
     if location in ['thornhill', 'kingston']:
         location += ' CA'
-    weather_api_key = os.environ['WEATHER_API_KEY']
 
     #Calling API
+    weather_api_key = os.environ['WEATHER_API_KEY']
     three_day_forcast_url = "http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={location}&days=2&aqi=no&alerts=no"
     three_day_forcast = get_forcast(three_day_forcast_url.format(api_key=weather_api_key, location=location))
-    res = []
-
+    
     #If forcast doesn't work, skip storing
     if three_day_forcast == None:
+        logger.info(title +' | Error')
         return title + " | Error"
     else: 
         current, forcast = three_day_forcast['current'], three_day_forcast['forecast']['forecastday']
@@ -170,7 +175,7 @@ def get_weather_api(location):
     #Get current hour
     today = datetime.now(tz=time_zone)
     cur_hour = today.hour
-
+    
     #Collect current weather data
     cur_time = hour_rounder(datetime.fromtimestamp(current['last_updated_epoch'], tz=time_zone))
     temp = current['temp_c']
@@ -192,33 +197,29 @@ def get_weather_api(location):
         condition = get_condition_index(weather_api_conditions, hour['condition']['code'])
         cloud_cov = hour['cloud']
         res.append({'Temp': temp, 'Condition': condition, 'Cloud Cov': cloud_cov})
-
-    #Store whole item at once 
     logger.info(f"Storing {cur_time.strftime('%Y-%m-%dT%H')} to {title} table")
     save_to_db(title, res)
     
 def save_to_db(table_name, data):
-    #Create Json object with data collected
-    date, fc, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 = data
+    date, hc, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12 = data
     new_item = {
         'Date': date, 
-        'cur': fc,
-        'f1': f1,
-        'f2': f2,
-        'f3': f3,
-        'f4': f4,
-        'f5': f5,
-        'f6': f6,
-        'f7': f7,
-        'f8': f8,
-        'f9': f9,
-        'f10': f10,
-        'f11': f11,
-        'f12': f12,
+        'cur': hc,
+        'f1': h1,
+        'f2': h2,
+        'f3': h3,
+        'f4': h4,
+        'f5': h5,
+        'f6': h6,
+        'f7': h7,
+        'f8': h8,
+        'f9': h9,
+        'f10': h10,
+        'f11': h11,
+        'f12': h12,
         'forcasts': {}
         }
     
-    #Store item
     new_item = json.loads(jsonDB.dumps(new_item))
     dynamodb.put_item(TableName = table_name, Item=new_item)
     logger.info(f"Successfully stored to {table_name}") 
@@ -228,11 +229,11 @@ def lambda_handler(event, context):
     for location in locations:
         get_weather_api(location)
         get_open_weather(location)
-    
-    get_accu_weather('toronto')
+        get_accu_weather(location)
+        
     response = {
         "statusCode": 200,
-        "body": "yehaw" #Yehaw
+        "body": "yehaw"
     }
 
     return response

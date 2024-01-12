@@ -1,3 +1,5 @@
+import logging
+# from json import dumps, loads
 import json
 from dynamodb_json import json_util as jsonDB
 import boto3
@@ -5,19 +7,17 @@ import boto3
 dynamodb = boto3.client('dynamodb')
 waiter1 = dynamodb.get_waiter('table_exists')
 waiter2 = dynamodb.get_waiter('table_not_exists')
-
 table_names = ['Weather_API_toronto', 'Weather_API_kingston', 'Weather_API_innisfil',
     'Open_Weather_toronto','Open_Weather_kingston', 'Open_Weather_innisfil',
-    'Accu_Weather_toronto']
+    'Accu_Weather_toronto', 'Accu_Weather_kingston', 'Accu_Weather_innisfil']
 
 def create_tables():
-    #Create each table with Date primary key and AverageForcast Item
     for table_name in table_names:
         response = dynamodb.create_table(
             TableName= table_name,
-            AttributeDefinitions=[  
+            AttributeDefinitions=[
                 {
-                    'AttributeName': 'Date', 
+                    'AttributeName': 'Date',
                     'AttributeType': 'S',
                 }
             ],
@@ -30,7 +30,6 @@ def create_tables():
             BillingMode = 'PAY_PER_REQUEST',
         )
 
-    #Second for loop so don't have to wait for each table, only first 1 or 2
     for table_name in table_names:    
         forcast_item = {
             'Date': 'AverageForcast',
@@ -48,7 +47,6 @@ def create_tables():
             'f12': {'avg':0,'count':0},
         }
         forcast_item = json.loads(jsonDB.dumps(forcast_item))
-        #Wait for tables to be available
         waiter1.wait(
             TableName=table_name,
             WaiterConfig={

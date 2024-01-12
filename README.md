@@ -106,4 +106,3 @@ Each table has one item for keeping track of the average forecast for the table.
 - - I initially wanted to utilize more common weather providers, specifically those apart of the initial debate, such as the Weather Network and Weather Channel, but they have no available APIs
 
 **Weather APIs are pretty expensive, especially when you would be paying for 3-4 a month 😬
-
